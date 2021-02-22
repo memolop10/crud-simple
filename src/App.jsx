@@ -2,7 +2,7 @@ import React from 'react';
 import shortid from 'shortid';
 function App() {
   const [tarea, setTarea]= React.useState('');
-  const [tareas, setTareas] = React.useState('');
+  const [tareas, setTareas] = React.useState([]);
 
   const agregarTarea = e =>{
     e.preventDefault();
@@ -10,7 +10,7 @@ function App() {
       console.log('Elemento vacio');
       return
     }
-    console.log(tarea);
+    //console.log(tarea);
 
     setTareas([
       ...tareas,
@@ -18,6 +18,11 @@ function App() {
     ])
 
     setTarea('');
+  }
+  const eliminarTarea = id => {
+    //console.log(id)
+    const arrayFiltrado = tareas.filter( item => item.id !== id)
+    setTareas(arrayFiltrado);
   }
   return (
     <div className="container mt-5">
@@ -29,12 +34,26 @@ function App() {
             Lista de Tareas
           </h4>
           <ul className="list-group">
-            <li className="list-group-item">
-              <span className="lead">Nombre de la tarea</span>
-              <button className="btn btn-danger btn-sm float-end mx-2">Eliminar</button>
-              <button className="btn btn-warning btn-sm float-end">Editar</button>
 
+          {
+            tareas.map( item => (
+            <li className="list-group-item" key={item.id}>
+              <span className="lead">{item.nombreTarea}</span>
+              <button 
+                className="btn btn-danger btn-sm float-end mx-2"
+                onClick={ () => eliminarTarea(item.id)}
+                >
+                  Eliminar
+              </button>
+              <button 
+                className="btn btn-warning btn-sm float-end">
+                  Editar
+              </button>
             </li>
+            ))
+          }
+            
+     
           </ul>
         </div>
         <div className="col-4">
