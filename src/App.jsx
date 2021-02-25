@@ -4,6 +4,7 @@ function App() {
   const [tarea, setTarea]= React.useState('');
   const [tareas, setTareas] = React.useState([]);
   const [modoEdicion, setModoEdicion] = React.useState(false);
+  const [id ,setId ] = React.useState('');
 
   const agregarTarea = e =>{
     e.preventDefault();
@@ -32,6 +33,7 @@ function App() {
     console.log(item)
     setModoEdicion(true);
     setTarea(item.nombreTarea);
+    setId(item.id)
   }
 
   const editarTarea = e =>{
@@ -40,6 +42,15 @@ function App() {
       console.log('Elemento vacio');
       return
     }
+
+    const arrayEditado = tareas.map( item => {
+      return item.id === id ? {id, nombreTarea:tarea} : item
+    })
+
+    setTareas(arrayEditado);
+    setModoEdicion(false);
+    setTarea('');
+    setId('');
   } 
   
   return (
@@ -83,7 +94,8 @@ function App() {
             }
 
           </h4>
-          <form onSubmit={ modoEdicion ? editarTarea : agregarTarea}>
+          <form onSubmit={ modoEdicion ? editarTarea : agregarTarea}
+            className="d-grid gap-2">
             <input 
              className="form-control mb-2"
              type="text"
@@ -101,7 +113,7 @@ function App() {
                   </button>
                 ):(
                   <button 
-                    className="btn btn-dark btn-block" 
+                    className="btn btn-dark" 
                     type="submit">
                       Agregar 
                   </button>
