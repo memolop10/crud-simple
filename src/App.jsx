@@ -5,11 +5,13 @@ function App() {
   const [tareas, setTareas] = React.useState([]);
   const [modoEdicion, setModoEdicion] = React.useState(false);
   const [id ,setId ] = React.useState('');
+  const [error, setError] = React.useState(null);
 
   const agregarTarea = e =>{
     e.preventDefault();
     if (!tarea.trim()) {
       console.log('Elemento vacio');
+      setError('Escriba alguna por favor');
       return
     }
     //console.log(tarea);
@@ -20,6 +22,7 @@ function App() {
     ])
 
     setTarea('');
+    setError(null);
   }
 
   const eliminarTarea = id => {
@@ -40,6 +43,7 @@ function App() {
     e.preventDefault();
     if (!tarea.trim()) {
       console.log('Elemento vacio');
+      setError('Escriba alguna por favor');
       return
     }
 
@@ -51,6 +55,7 @@ function App() {
     setModoEdicion(false);
     setTarea('');
     setId('');
+    setError(null);
   } 
   
   return (
@@ -65,25 +70,33 @@ function App() {
           <ul className="list-group">
 
           {
-            tareas.map( item => (
-            <li className="list-group-item" key={item.id}>
-              <span className="lead">{item.nombreTarea}</span>
-              <button 
-                className="btn btn-danger btn-sm float-end mx-2"
-                onClick={ () => eliminarTarea(item.id)}
-                >
-                  Eliminar
-              </button>
-              <button 
-                className="btn btn-warning btn-sm float-end"
-                onClick={() => editar(item)}>
-                  Editar
-              </button>
-            </li>
-            ))
+
+             tareas.length === 0 ? (
+              <li className="list-group-item">
+                No hay tareas
+              </li>
+
+             ):(
+              tareas.map( item => (
+                <li className="list-group-item" key={item.id}>
+                  <span className="lead">{item.nombreTarea}</span>
+                  <button 
+                    className="btn btn-danger btn-sm float-end mx-2"
+                    onClick={ () => eliminarTarea(item.id)}
+                    >
+                      Eliminar
+                  </button>
+                  <button 
+                    className="btn btn-warning btn-sm float-end"
+                    onClick={() => editar(item)}>
+                      Editar
+                  </button>
+                </li>
+                ))
+              )
           }
-            
-     
+    
+
           </ul>
         </div>
         <div className="col-4">
@@ -96,6 +109,11 @@ function App() {
           </h4>
           <form onSubmit={ modoEdicion ? editarTarea : agregarTarea}
             className="d-grid gap-2">
+
+             {
+               error ? <span className="text-danger">{error}</span> : null
+             } 
+
             <input 
              className="form-control mb-2"
              type="text"
